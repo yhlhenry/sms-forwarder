@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/tutorial_heading"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall"
+            android:layout_marginBottom="4dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/tutorial_subheading"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:layout_marginBottom="28dp"/>
+
+        <!-- ── ABOUT ── -->
+        <TextView style="@style/SectionLabel" android:text="@string/section_about"/>
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp" app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorOutlineVariant" app:cardElevation="0dp">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:padding="16dp" android:lineSpacingMultiplier="1.5"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:text="@string/tutorial_about_body"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── VARIABLES ── -->
+        <TextView style="@style/SectionLabel" android:text="@string/section_variables"/>
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp" app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorOutlineVariant" app:cardElevation="0dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_receiver_label" android:fontFamily="monospace"
+                        android:textColor="?attr/colorPrimary" android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:layout_marginBottom="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_receiver_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?attr/colorOutlineVariant" android:layout_marginHorizontal="14dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_sender_label" android:fontFamily="monospace"
+                        android:textColor="?attr/colorPrimary" android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:layout_marginBottom="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_sender_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?attr/colorOutlineVariant" android:layout_marginHorizontal="14dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_message_label" android:fontFamily="monospace"
+                        android:textColor="?attr/colorPrimary" android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:layout_marginBottom="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_message_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?attr/colorOutlineVariant" android:layout_marginHorizontal="14dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_device_label" android:fontFamily="monospace"
+                        android:textColor="?attr/colorPrimary" android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:layout_marginBottom="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_device_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                </LinearLayout>
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?attr/colorOutlineVariant" android:layout_marginHorizontal="14dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_timestamp_label" android:fontFamily="monospace"
+                        android:textColor="?attr/colorPrimary" android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:layout_marginBottom="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/var_timestamp_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── SETUP STEPS ── -->
+        <TextView style="@style/SectionLabel" android:text="@string/section_steps"/>
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp" app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorOutlineVariant" app:cardElevation="0dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="14dp">
+                    <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="1."
+                        android:textAppearance="?attr/textAppearanceLabelLarge" android:textColor="?attr/colorPrimary"/>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step1_title" android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:layout_marginBottom="2dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step1_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="14dp">
+                    <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="2."
+                        android:textAppearance="?attr/textAppearanceLabelLarge" android:textColor="?attr/colorPrimary"/>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step2_title" android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:layout_marginBottom="2dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step2_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="14dp">
+                    <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="3."
+                        android:textAppearance="?attr/textAppearanceLabelLarge" android:textColor="?attr/colorPrimary"/>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step3_title" android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:layout_marginBottom="2dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step3_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="14dp">
+                    <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="4."
+                        android:textAppearance="?attr/textAppearanceLabelLarge" android:textColor="?attr/colorPrimary"/>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step4_title" android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:layout_marginBottom="2dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step4_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="5."
+                        android:textAppearance="?attr/textAppearanceLabelLarge" android:textColor="?attr/colorPrimary"/>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step5_title" android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:layout_marginBottom="2dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/step5_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── TESTING ── -->
+        <TextView style="@style/SectionLabel" android:text="@string/section_testing"/>
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="32dp"
+            app:cardCornerRadius="12dp" app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorOutlineVariant" app:cardElevation="0dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/test_send_title" android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:layout_marginBottom="2dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/test_send_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"
+                    android:layout_marginBottom="16dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/test_inbox_title" android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:layout_marginBottom="2dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/test_inbox_desc" android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStartUsing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_start_using"
+            android:layout_marginBottom="8dp"/>
+
+    </LinearLayout>
+</ScrollView>

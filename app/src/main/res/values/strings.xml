@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMS Forwarder</string>
+    <string name="app_tagline">Forward incoming SMS to a Webhook</string>
+
+    <!-- Home -->
+    <string name="home_tutorial_title">Tutorial</string>
+    <string name="home_tutorial_subtitle">Variables, setup steps &amp; testing guide</string>
+    <string name="home_app_title">Open App</string>
+    <string name="home_app_subtitle">Configure Webhook, test &amp; view logs</string>
+    <string name="home_language_label">Language</string>
+
+    <!-- Tutorial page -->
+    <string name="tutorial_heading">Tutorial</string>
+    <string name="tutorial_subheading">SMS Forwarder User Guide</string>
+    <string name="section_about">ABOUT</string>
+    <string name="tutorial_about_body">When your phone receives an SMS, this app automatically sends the message data to your configured Webhook URL via HTTP request.\n\nSupports POST, PUT, and GET methods. Customize the request body using variable placeholders — they are automatically replaced with real values when sending.</string>
+    <string name="section_variables">VARIABLES</string>
+    <!-- Variable labels are code strings — do not translate -->
+    <string name="var_receiver_label" translatable="false">{receiver}</string>
+    <string name="var_receiver_desc">Receiver number — this device\'s own phone number (the SIM that received the SMS).</string>
+    <string name="var_sender_label" translatable="false">{sender}</string>
+    <string name="var_sender_desc">Sender number — the phone number that sent this SMS.</string>
+    <string name="var_message_label" translatable="false">{message}</string>
+    <string name="var_message_desc">Message content — the full text body of the SMS.</string>
+    <string name="var_device_label" translatable="false">{device}</string>
+    <string name="var_device_desc">Device name — customizable in Settings, defaults to the phone model (e.g. Pixel 7). Useful for distinguishing sources when using multiple devices.</string>
+    <string name="var_timestamp_label" translatable="false">{timestamp}</string>
+    <string name="var_timestamp_desc">Timestamp — the time the SMS was received, in ISO 8601 UTC format (e.g. 2026-04-10T06:30:00Z).</string>
+    <string name="section_steps">SETUP STEPS</string>
+    <string name="step1_title">Enter Webhook URL</string>
+    <string name="step1_desc">Enter your Webhook URL in the ENDPOINT field.</string>
+    <string name="step2_title">Choose HTTP Method</string>
+    <string name="step2_desc">POST / PUT: sends data as a JSON body. GET: sends data as query parameters.</string>
+    <string name="step3_title">Edit Request Body</string>
+    <string name="step3_desc">Write your JSON template in the body field. Tap the variable chips below to insert placeholders at the cursor position.</string>
+    <string name="step4_title">Save Settings</string>
+    <string name="step4_desc">After saving, the app will automatically forward incoming SMS in the background.</string>
+    <string name="step5_title">Grant Required Permissions</string>
+    <string name="step5_desc">On first launch the app requests SMS, Contacts, and Phone permissions. Allow all for full functionality.</string>
+    <string name="section_testing">TESTING</string>
+    <string name="test_send_title">Send Test</string>
+    <string name="test_send_desc">Sends a request using dummy data to verify your Webhook is working.</string>
+    <string name="test_inbox_title">Test from Inbox</string>
+    <string name="test_inbox_desc">Select a real SMS from your inbox. A payload preview is shown before sending so you can verify variable substitution.</string>
+    <string name="btn_start_using">Get Started</string>
+
+    <!-- Main activity -->
+    <string name="section_endpoint">ENDPOINT</string>
+    <string name="hint_url" translatable="false">URL</string>
+    <string name="hint_device_name">Device Name  (used in {device} placeholder)</string>
+    <string name="section_request_body">REQUEST BODY</string>
+    <string name="hint_body_template">Body Template (JSON)</string>
+    <string name="label_tap_to_insert">Tap to insert variable</string>
+    <string name="btn_save_settings">Save Settings</string>
+    <string name="btn_send_test">Send Test</string>
+    <string name="btn_test_from_inbox">Test from Inbox</string>
+    <string name="section_log">FORWARDING LOG</string>
+    <string name="btn_clear">Clear</string>
+    <string name="log_empty">(no logs yet)</string>
+
+    <!-- Toasts / dialogs -->
+    <string name="toast_settings_saved">Settings saved</string>
+    <string name="toast_enter_url">Please enter a URL</string>
+    <string name="toast_sms_permission_required">SMS permission required to forward messages</string>
+    <string name="toast_phone_permission_denied">{receiver} will be empty — phone number permission denied</string>
+    <string name="toast_read_sms_denied">READ_SMS permission not granted</string>
+    <string name="toast_no_sms_found">No SMS found in inbox</string>
+    <string name="dialog_pick_sms_title">Select SMS to Test</string>
+    <string name="dialog_payload_preview_title">Payload Preview (%1$s)</string>
+    <string name="btn_send">Send</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="log_label_sender" translatable="false">sender</string>
+    <string name="log_label_receiver" translatable="false">receiver</string>
+</resources>

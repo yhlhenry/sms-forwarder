@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- SMS bubble -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M20,28 Q20,20 28,20 L80,20 Q88,20 88,28 L88,64 Q88,72 80,72 L58,72 L54,82 L50,72 L28,72 Q20,72 20,64 Z"/>
+    <!-- Text lines inside bubble -->
+    <path android:fillColor="#1565C0" android:pathData="M32,36 L76,36 L76,40 L32,40 Z"/>
+    <path android:fillColor="#1565C0" android:pathData="M32,46 L76,46 L76,50 L32,50 Z"/>
+    <path android:fillColor="#1565C0" android:pathData="M32,56 L58,56 L58,60 L32,60 Z"/>
+</vector>

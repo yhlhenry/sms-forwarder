@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall"
+            android:layout_marginBottom="2dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_tagline"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Section: Endpoint -->
+        <TextView style="@style/SectionLabel" android:text="@string/section_endpoint"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_url"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="10dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri"
+                android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_device_name"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="10dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDeviceName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RadioGroup
+            android:id="@+id/rgMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+            <RadioButton android:id="@+id/rbPost" android:text="POST" android:checked="true"/>
+            <RadioButton android:id="@+id/rbPut"  android:text="PUT"  android:layout_marginStart="8dp"/>
+            <RadioButton android:id="@+id/rbGet"  android:text="GET"  android:layout_marginStart="8dp"/>
+        </RadioGroup>
+
+        <!-- Section: Body Template -->
+        <TextView style="@style/SectionLabel" android:text="@string/section_request_body"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_body_template"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="8dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBodyTemplate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="6"
+                android:gravity="top|start"
+                android:fontFamily="monospace"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Variable chips -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_tap_to_insert"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:layout_marginBottom="4dp"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:chipSpacingHorizontal="4dp"
+            app:chipSpacingVertical="4dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipReceiver"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/var_receiver_label"
+                android:fontFamily="monospace"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSender"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/var_sender_label"
+                android:fontFamily="monospace"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipMessage"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/var_message_label"
+                android:fontFamily="monospace"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipDevice"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/var_device_label"
+                android:fontFamily="monospace"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTimestamp"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/var_timestamp_label"
+                android:fontFamily="monospace"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- Action Buttons -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_save_settings"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="28dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTest"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:text="@string/btn_send_test"
+                android:layout_marginEnd="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPickSms"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:text="@string/btn_test_from_inbox"/>
+        </LinearLayout>
+
+        <!-- Section: Logs -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/section_log"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClearLogs"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_clear"
+                android:minHeight="0dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvLogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#12000000"
+            android:padding="12dp"
+            android:fontFamily="monospace"
+            android:textSize="11sp"
+            android:lineSpacingMultiplier="1.3"
+            android:text="@string/log_empty"
+            android:minHeight="80dp"/>
+
+    </LinearLayout>
+</ScrollView>
