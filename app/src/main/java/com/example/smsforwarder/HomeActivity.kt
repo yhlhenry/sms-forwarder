@@ -1,6 +1,7 @@
 package com.example.smsforwarder
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -33,6 +34,9 @@ class HomeActivity : AppCompatActivity() {
         }
         binding.cardApp.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
+        }
+        binding.btnGithub.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.home_github_url))))
         }
 
         setupLanguageChips(binding)

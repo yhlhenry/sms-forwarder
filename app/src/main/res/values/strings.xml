@@ -72,4 +72,6 @@
     <string name="btn_cancel">Cancel</string>
     <string name="log_label_sender" translatable="false">sender</string>
     <string name="log_label_receiver" translatable="false">receiver</string>
+    <string name="home_github_label">GitHub — Issues &amp; Feedback</string>
+    <string name="home_github_url" translatable="false">https://github.com/yhlhenry/sms-forwarder</string>
 </resources>

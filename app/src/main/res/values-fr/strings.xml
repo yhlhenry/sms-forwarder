@@ -54,4 +54,5 @@
     <string name="dialog_payload_preview_title">Aperçu du Payload (%1$s)</string>
     <string name="btn_send">Envoyer</string>
     <string name="btn_cancel">Annuler</string>
+    <string name="home_github_label">GitHub — Problèmes et retours</string>
 </resources>

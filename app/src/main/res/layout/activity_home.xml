@@ -103,7 +103,8 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:layout_marginBottom="32dp">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupLanguage"
@@ -113,6 +114,15 @@
                 app:chipSpacingHorizontal="4dp"/>
 
         </HorizontalScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGithub"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_github_label"
+            android:textAppearance="?attr/textAppearanceLabelMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"/>
 
     </LinearLayout>
 </ScrollView>

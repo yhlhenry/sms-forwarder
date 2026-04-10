@@ -54,4 +54,5 @@
     <string name="dialog_payload_preview_title">Payload 미리보기 (%1$s)</string>
     <string name="btn_send">전송</string>
     <string name="btn_cancel">취소</string>
+    <string name="home_github_label">GitHub — 문의 및 피드백</string>
 </resources>
