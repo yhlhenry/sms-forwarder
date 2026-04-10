@@ -4,21 +4,32 @@ plugins {
 }
 
 android {
-    namespace 'com.example.smsforwarder'
+    namespace 'com.yhlhenry.smsforwarder'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.smsforwarder"
+        applicationId "com.yhlhenry.smsforwarder"
         minSdk 21
         targetSdk 34
         versionCode 1
         versionName "1.0"
     }
 
+    signingConfigs {
+        release {
+            storeFile     file(project.findProperty("RELEASE_STORE_FILE")     ?: "sms-forwarder-release.jks")
+            storePassword (project.findProperty("RELEASE_STORE_PASSWORD")     ?: "")
+            keyAlias      (project.findProperty("RELEASE_KEY_ALIAS")          ?: "sms-forwarder")
+            keyPassword   (project.findProperty("RELEASE_KEY_PASSWORD")       ?: "")
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled   true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
