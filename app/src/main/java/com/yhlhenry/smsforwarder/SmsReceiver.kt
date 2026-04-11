@@ -15,8 +15,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
 import org.json.JSONObject
-import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -28,21 +28,36 @@ class SmsReceiver : BroadcastReceiver() {
         private const val TAG = "SmsReceiver"
         const val PREFS_NAME = "sms_forwarder"
 
-        // Variable reference:
-        //   {receiver}  — this device's phone number (the SIM that received the SMS)
-        //   {sender}    — the phone number that sent the SMS
-        //   {message}   — the SMS body
-        //   {device}    — device model name (user-configurable)
-        //   {timestamp} — UTC ISO-8601 timestamp
-        fun defaultTemplate(): String = "{\n" +
-            "  \"receiver\": \"{receiver}\",\n" +
-            "  \"sender\": \"{sender}\",\n" +
-            "  \"message\": \"{message}\",\n" +
-            "  \"device\": \"{device}\",\n" +
-            "  \"timestamp\": \"{timestamp}\"\n" +
-            "}"
-
         fun logFile(context: Context) = java.io.File(context.getExternalFilesDir(null), "sms_log.txt")
+
+        /** Builds the Slack Incoming Webhook JSON payload. */
+        fun buildSlackPayload(
+            sender: String,
+            message: String,
+            receiver: String,
+            deviceName: String,
+            timestamp: String
+        ): String = JSONObject().apply {
+            put("text", "New SMS from $sender: $message")
+            put("blocks", JSONArray().apply {
+                put(JSONObject().apply {
+                    put("type", "section")
+                    put("text", JSONObject().apply {
+                        put("type", "mrkdwn")
+                        put("text", "📱 *New SMS from $sender*\n\n$message")
+                    })
+                })
+                put(JSONObject().apply {
+                    put("type", "context")
+                    put("elements", JSONArray().apply {
+                        put(JSONObject().apply {
+                            put("type", "mrkdwn")
+                            put("text", "To: $receiver · $timestamp · via $deviceName")
+                        })
+                    })
+                })
+            })
+        }.toString()
 
         /** Returns this device's own phone number, or empty string if unavailable. */
         @SuppressLint("HardwareIds", "MissingPermission")
@@ -80,14 +95,10 @@ class SmsReceiver : BroadcastReceiver() {
 
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val url = prefs.getString("api_url", "").orEmpty()
-        val method = prefs.getString("http_method", "POST").orEmpty().ifBlank { "POST" }
-        val bodyTemplate = prefs.getString("body_template", defaultTemplate()).orEmpty()
-            .ifBlank { defaultTemplate() }
-        val deviceName = prefs.getString("device_name", Build.MODEL).orEmpty()
-            .ifBlank { Build.MODEL }
+        val deviceName = prefs.getString("device_name", Build.MODEL).orEmpty().ifBlank { Build.MODEL }
 
         if (url.isBlank()) {
-            Log.w(TAG, "API URL not configured, skipping forward")
+            Log.w(TAG, "Slack webhook URL not configured, skipping forward")
             return
         }
 
@@ -99,8 +110,7 @@ class SmsReceiver : BroadcastReceiver() {
             try {
                 for ((sender, msgBuilder) in assembled) {
                     val message = msgBuilder.toString()
-                    forwardSms(context, url, method, bodyTemplate,
-                        receiver, sender, message, deviceName, timestamp)
+                    forwardToSlack(context, url, sender, message, receiver, deviceName, timestamp)
                 }
             } finally {
                 pendingResult.finish()
@@ -108,43 +118,29 @@ class SmsReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun forwardSms(
+    private fun forwardToSlack(
         context: Context,
         url: String,
-        method: String,
-        bodyTemplate: String,
-        receiver: String,    // {receiver} — this device's number
-        sender: String,      // {sender}   — who sent the SMS
-        message: String,     // {message}  — SMS body
+        sender: String,
+        message: String,
+        receiver: String,
         deviceName: String,
         timestamp: String
     ) {
-        val body = bodyTemplate
-            .replace("{receiver}",  receiver.jsonEscape())
-            .replace("{sender}",    sender.jsonEscape())
-            .replace("{message}",   message.jsonEscape())
-            .replace("{device}",    deviceName.jsonEscape())
-            .replace("{timestamp}", timestamp.jsonEscape())
-
+        val payload = buildSlackPayload(sender, message, receiver, deviceName, timestamp)
         val status = try {
             val client = OkHttpClient()
-            val json = "application/json".toMediaType()
-            val request = when (method.uppercase()) {
-                "GET" -> Request.Builder()
-                    .url("$url?receiver=${receiver.urlEncode()}&sender=${sender.urlEncode()}&message=${message.urlEncode()}&device=${deviceName.urlEncode()}&timestamp=${timestamp.urlEncode()}")
-                    .get().build()
-                "PUT" -> Request.Builder().url(url).put(body.toRequestBody(json)).build()
-                else  -> Request.Builder().url(url).post(body.toRequestBody(json)).build()
-            }
+            val request = Request.Builder()
+                .url(url)
+                .post(payload.toRequestBody("application/json".toMediaType()))
+                .build()
             val response = client.newCall(request).execute()
             val code = response.code
             val responseBody = response.body?.string()?.take(500).orEmpty()
             response.close()
-            Log.i(TAG, "Forwarded SMS  sender=$sender  receiver=$receiver  HTTP $code")
-            if (responseBody.isNotBlank() && responseBody != "ok")
-                "HTTP $code ($responseBody)"
-            else
-                "HTTP $code"
+            Log.i(TAG, "Forwarded SMS to Slack  sender=$sender  HTTP $code")
+            if (responseBody.isNotBlank() && responseBody != "ok") "HTTP $code ($responseBody)"
+            else "HTTP $code"
         } catch (e: Exception) {
             Log.e(TAG, "Failed to forward SMS from $sender", e)
             "ERROR: ${e.message}"
@@ -178,8 +174,4 @@ class SmsReceiver : BroadcastReceiver() {
 
     private fun localTimestamp() = SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault())
         .format(Date())
-
-    private fun String.urlEncode() = URLEncoder.encode(this, "UTF-8")
-
-    private fun String.jsonEscape(): String = JSONObject.quote(this).let { it.substring(1, it.length - 1) }
 }

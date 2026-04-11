@@ -22,7 +22,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -67,16 +66,6 @@ class MainActivity : AppCompatActivity() {
         binding.btnPickSms.setOnClickListener { pickSmsAndTest() }
         binding.btnClearLogs.setOnClickListener { clearLogs() }
 
-        listOf(
-            binding.chipReceiver  to "{receiver}",
-            binding.chipSender    to "{sender}",
-            binding.chipMessage   to "{message}",
-            binding.chipDevice    to "{device}",
-            binding.chipTimestamp to "{timestamp}"
-        ).forEach { (chip, variable) ->
-            chip.setOnClickListener { binding.etBodyTemplate.insertAtCursor(variable) }
-        }
-
         refreshLogs()
     }
 
@@ -111,22 +100,12 @@ class MainActivity : AppCompatActivity() {
         val prefs = prefs()
         binding.etUrl.setText(prefs.getString("api_url", ""))
         binding.etDeviceName.setText(prefs.getString("device_name", Build.MODEL))
-        binding.etBodyTemplate.setText(
-            prefs.getString("body_template", SmsReceiver.defaultTemplate())
-        )
-        when (prefs.getString("http_method", "POST")) {
-            "GET" -> binding.rgMethod.check(R.id.rbGet)
-            "PUT" -> binding.rgMethod.check(R.id.rbPut)
-            else  -> binding.rgMethod.check(R.id.rbPost)
-        }
     }
 
     private fun saveSettings() {
         prefs().edit()
             .putString("api_url", binding.etUrl.text.toString().trim())
             .putString("device_name", binding.etDeviceName.text.toString().trim().ifBlank { Build.MODEL })
-            .putString("body_template", binding.etBodyTemplate.text.toString())
-            .putString("http_method", selectedMethod())
             .apply()
     }
 
@@ -137,15 +116,13 @@ class MainActivity : AppCompatActivity() {
             return
         }
         saveSettings()
-        val method     = selectedMethod()
-        val deviceName = binding.etDeviceName.text.toString().trim().ifBlank { Build.MODEL }
-        val timestamp  = isoTimestamp()
-        val receiver   = SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" }
+        val deviceName  = binding.etDeviceName.text.toString().trim().ifBlank { Build.MODEL }
+        val timestamp   = isoTimestamp()
+        val receiver    = SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" }
         val testSender  = "+886912345678"
-        val testMessage = "Test SMS from SMS Forwarder"
-        val rendered = renderBody(receiver, testSender, testMessage, deviceName, timestamp)
-        executeTestRequest(url, method, receiver, testSender, testMessage,
-            rendered, deviceName, timestamp, binding.btnTest)
+        val testMessage = "Test SMS from SMS to Slack"
+        val payload = SmsReceiver.buildSlackPayload(testSender, testMessage, receiver, deviceName, timestamp)
+        executeRequest(url, payload, binding.btnTest)
     }
 
     private fun refreshLogs() {
@@ -192,12 +169,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun prefs() = getSharedPreferences(SmsReceiver.PREFS_NAME, Context.MODE_PRIVATE)
 
-    private fun selectedMethod() = when (binding.rgMethod.checkedRadioButtonId) {
-        R.id.rbGet -> "GET"
-        R.id.rbPut -> "PUT"
-        else       -> "POST"
-    }
-
     private fun isoTimestamp() = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
         .apply { timeZone = TimeZone.getTimeZone("UTC") }
         .format(Date())
@@ -234,33 +205,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun showPayloadPreview(sms: SmsItem) {
         val url        = binding.etUrl.text.toString().trim()
-        val method     = selectedMethod()
         val deviceName = binding.etDeviceName.text.toString().trim().ifBlank { Build.MODEL }
         val timestamp  = isoTimestamp()
         val receiver   = SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" }
-        // {sender} = sender's raw phone number; contact name is for display only
-        val rendered   = renderBody(receiver, sms.address, sms.body, deviceName, timestamp)
+        val payload    = SmsReceiver.buildSlackPayload(sms.address, sms.body, receiver, deviceName, timestamp)
 
         val preview = buildString {
-            append("── 變數值 ──────────────────\n")
-            append("{receiver}  $receiver\n")
-            append("{sender}    ${sms.address}\n")
-            if (sms.displayName != sms.address) append("  (聯絡人: ${sms.displayName})\n")
-            append("{message}   ${sms.body.take(60)}${if (sms.body.length > 60) "…" else ""}\n")
-            append("{device}    $deviceName\n")
-            append("{timestamp} $timestamp\n")
-            if (method != "GET") {
-                append("\n── $method body ─────────────\n")
-                append(rendered)
-            }
+            append("📱 New SMS from ${sms.address}")
+            if (sms.displayName != sms.address) append("\n   (${sms.displayName})")
+            append("\n\n${sms.body.take(200)}${if (sms.body.length > 200) "…" else ""}")
+            append("\n\nTo: $receiver · $timestamp\nvia $deviceName")
         }
 
         AlertDialog.Builder(this)
-            .setTitle(getString(R.string.dialog_payload_preview_title, method))
+            .setTitle(R.string.dialog_payload_preview_title)
             .setMessage(preview)
             .setPositiveButton(R.string.btn_send) { _, _ ->
-                executeTestRequest(url, method, receiver, sms.address, sms.body,
-                    rendered, deviceName, timestamp, binding.btnPickSms)
+                executeRequest(url, payload, binding.btnPickSms)
             }
             .setNegativeButton(R.string.btn_cancel, null)
             .show()
@@ -310,30 +271,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Renders the body template with actual values.
-     * @param receiver  {receiver} — this device's phone number
-     * @param sender    {sender}   — the sender's phone number
-     */
-    private fun renderBody(
-        receiver: String,
-        sender: String,
-        message: String,
-        deviceName: String,
-        timestamp: String
-    ) = binding.etBodyTemplate.text.toString()
-        .replace("{receiver}",  receiver)
-        .replace("{sender}",    sender)
-        .replace("{message}",   message)
-        .replace("{device}",    deviceName)
-        .replace("{timestamp}", timestamp)
-
-    private fun executeTestRequest(
-        url: String, method: String,
-        receiver: String, sender: String, message: String,
-        renderedBody: String, deviceName: String, timestamp: String,
-        disableButton: android.widget.Button
-    ) {
+    private fun executeRequest(url: String, payload: String, disableButton: android.widget.Button) {
         if (url.isBlank()) {
             Toast.makeText(this, R.string.toast_enter_url, Toast.LENGTH_SHORT).show()
             return
@@ -341,15 +279,11 @@ class MainActivity : AppCompatActivity() {
         disableButton.isEnabled = false
         CoroutineScope(Dispatchers.IO).launch {
             val result = runCatching {
-                val client = OkHttpClient()
-                val json   = "application/json".toMediaType()
-                val request = when (method) {
-                    "GET" -> Request.Builder()
-                        .url("$url?receiver=${receiver.urlEncode()}&sender=${sender.urlEncode()}&message=${message.urlEncode()}&device=${deviceName.urlEncode()}&timestamp=${timestamp.urlEncode()}")
-                        .get().build()
-                    "PUT" -> Request.Builder().url(url).put(renderedBody.toRequestBody(json)).build()
-                    else  -> Request.Builder().url(url).post(renderedBody.toRequestBody(json)).build()
-                }
+                val client  = OkHttpClient()
+                val request = Request.Builder()
+                    .url(url)
+                    .post(payload.toRequestBody("application/json".toMediaType()))
+                    .build()
                 val response     = client.newCall(request).execute()
                 val code         = response.code
                 val responseBody = response.body?.string()?.take(300).orEmpty()
@@ -362,13 +296,5 @@ class MainActivity : AppCompatActivity() {
                 disableButton.isEnabled = true
             }
         }
-    }
-
-    private fun String.urlEncode() = URLEncoder.encode(this, "UTF-8")
-
-    private fun android.widget.EditText.insertAtCursor(text: String) {
-        val start = selectionStart.coerceAtLeast(0)
-        val end   = selectionEnd.coerceAtLeast(0)
-        editableText.replace(minOf(start, end), maxOf(start, end), text)
     }
 }
