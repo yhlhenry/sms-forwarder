@@ -100,12 +100,14 @@ class MainActivity : AppCompatActivity() {
         val prefs = prefs()
         binding.etUrl.setText(prefs.getString("api_url", ""))
         binding.etDeviceName.setText(prefs.getString("device_name", Build.MODEL))
+        binding.etMyNumber.setText(prefs.getString("my_number", ""))
     }
 
     private fun saveSettings() {
         prefs().edit()
             .putString("api_url", binding.etUrl.text.toString().trim())
             .putString("device_name", binding.etDeviceName.text.toString().trim().ifBlank { Build.MODEL })
+            .putString("my_number", binding.etMyNumber.text.toString().trim())
             .apply()
     }
 
@@ -118,11 +120,12 @@ class MainActivity : AppCompatActivity() {
         saveSettings()
         val deviceName  = binding.etDeviceName.text.toString().trim().ifBlank { Build.MODEL }
         val timestamp   = isoTimestamp()
-        val receiver    = SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" }
+        val myNumber    = binding.etMyNumber.text.toString().trim()
+        val receiver    = myNumber.ifBlank { SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" } }
         val testSender  = "+886912345678"
         val testMessage = "Test SMS from SMS to Slack"
         val payload = SmsReceiver.buildPayload(testSender, testMessage, receiver, deviceName, timestamp)
-        executeRequest(url, payload, binding.btnTest)
+        executeRequest(url, payload, testSender, receiver, binding.btnTest)
     }
 
     private fun refreshLogs() {
@@ -191,14 +194,31 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val labels = smsList.map { sms ->
-            val header = if (sms.displayName != sms.address) "${sms.displayName}\n${sms.address}" else sms.address
-            "$header\n${sms.body.take(60).replace("\n", " ")}"
-        }.toTypedArray()
+        val adapter = object : android.widget.ArrayAdapter<SmsItem>(
+            this, R.layout.item_sms_pick, smsList
+        ) {
+            override fun getView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
+                val view = convertView ?: layoutInflater.inflate(R.layout.item_sms_pick, parent, false)
+                val sms = getItem(position)!!
+                val tvSender = view.findViewById<android.widget.TextView>(R.id.tvSender)
+                val tvNumber = view.findViewById<android.widget.TextView>(R.id.tvNumber)
+                val tvBody   = view.findViewById<android.widget.TextView>(R.id.tvBody)
+                if (sms.displayName != sms.address) {
+                    tvSender.text = sms.displayName
+                    tvNumber.text = sms.address
+                    tvNumber.visibility = android.view.View.VISIBLE
+                } else {
+                    tvSender.text = sms.address
+                    tvNumber.visibility = android.view.View.GONE
+                }
+                tvBody.text = sms.body.take(100).replace("\n", " ")
+                return view
+            }
+        }
 
         AlertDialog.Builder(this)
             .setTitle(R.string.dialog_pick_sms_title)
-            .setItems(labels) { _, index -> showPayloadPreview(smsList[index]) }
+            .setAdapter(adapter) { _, index -> showPayloadPreview(smsList[index]) }
             .setNegativeButton(R.string.btn_cancel, null)
             .show()
     }
@@ -207,7 +227,8 @@ class MainActivity : AppCompatActivity() {
         val url        = binding.etUrl.text.toString().trim()
         val deviceName = binding.etDeviceName.text.toString().trim().ifBlank { Build.MODEL }
         val timestamp  = isoTimestamp()
-        val receiver   = SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" }
+        val myNumber   = binding.etMyNumber.text.toString().trim()
+        val receiver   = myNumber.ifBlank { SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" } }
         val payload    = SmsReceiver.buildPayload(sms.address, sms.body, receiver, deviceName, timestamp)
 
         val preview = buildString {
@@ -223,7 +244,7 @@ class MainActivity : AppCompatActivity() {
             .setTitle(R.string.dialog_payload_preview_title)
             .setMessage(preview)
             .setPositiveButton(R.string.btn_send) { _, _ ->
-                executeRequest(url, payload, binding.btnPickSms)
+                executeRequest(url, payload, sms.address, receiver, binding.btnPickSms)
             }
             .setNegativeButton(R.string.btn_cancel, null)
             .show()
@@ -273,14 +294,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun executeRequest(url: String, payload: String, disableButton: android.widget.Button) {
+    private fun executeRequest(
+        url: String, payload: String,
+        sender: String, receiver: String,
+        disableButton: android.widget.Button
+    ) {
         if (url.isBlank()) {
             Toast.makeText(this, R.string.toast_enter_url, Toast.LENGTH_SHORT).show()
             return
         }
         disableButton.isEnabled = false
         CoroutineScope(Dispatchers.IO).launch {
-            val result = runCatching {
+            val status = runCatching {
                 val client  = OkHttpClient()
                 val request = Request.Builder()
                     .url(url)
@@ -293,8 +318,10 @@ class MainActivity : AppCompatActivity() {
                 if (responseBody.isNotBlank()) "HTTP $code: $responseBody" else "HTTP $code"
             }.getOrElse { "Error: ${it.message}" }
 
+            SmsReceiver.appendLog(this@MainActivity, sender, receiver, status)
+
             runOnUiThread {
-                Toast.makeText(this@MainActivity, result, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, status, Toast.LENGTH_SHORT).show()
                 disableButton.isEnabled = true
             }
         }

@@ -44,6 +44,23 @@ class SmsReceiver : BroadcastReceiver() {
             put("timestamp", timestamp)
         }.toString()
 
+        fun appendLog(context: Context, sender: String, receiver: String, status: String) {
+            val entry = "${localTimestamp()}|$sender|$receiver|$status"
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val lines = prefs.getString("logs", "").orEmpty()
+                .lines().filter { it.isNotBlank() }.takeLast(99).toMutableList()
+            lines.add(entry)
+            prefs.edit().putString("logs", lines.joinToString("\n")).apply()
+            try {
+                logFile(context).appendText("$entry\n")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to write log to file", e)
+            }
+            context.sendBroadcast(Intent("com.yhlhenry.smsforwarder.LOG_UPDATED"))
+        }
+
+        fun localTimestamp() = SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+
         /** Returns this device's own phone number, or empty string if unavailable. */
         @SuppressLint("HardwareIds", "MissingPermission")
         fun getOwnPhoneNumber(context: Context): String {
@@ -81,6 +98,7 @@ class SmsReceiver : BroadcastReceiver() {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val url = prefs.getString("api_url", "").orEmpty()
         val deviceName = prefs.getString("device_name", Build.MODEL).orEmpty().ifBlank { Build.MODEL }
+        val myNumber = prefs.getString("my_number", "").orEmpty()
 
         if (url.isBlank()) {
             Log.w(TAG, "Slack webhook URL not configured, skipping forward")
@@ -88,7 +106,7 @@ class SmsReceiver : BroadcastReceiver() {
         }
 
         val timestamp = isoTimestamp()
-        val receiver = getOwnPhoneNumber(context)
+        val receiver = myNumber.ifBlank { getOwnPhoneNumber(context) }
         val pendingResult = goAsync()
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -134,29 +152,7 @@ class SmsReceiver : BroadcastReceiver() {
         appendLog(context, sender, receiver, status)
     }
 
-    /** Stores one log entry as a pipe-separated line: localTime|sender|receiver|status */
-    private fun appendLog(context: Context, sender: String, receiver: String, status: String) {
-        val entry = "${localTimestamp()}|$sender|$receiver|$status"
-
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val lines = prefs.getString("logs", "").orEmpty()
-            .lines().filter { it.isNotBlank() }.takeLast(99).toMutableList()
-        lines.add(entry)
-        prefs.edit().putString("logs", lines.joinToString("\n")).apply()
-
-        try {
-            logFile(context).appendText("$entry\n")
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to write log to file", e)
-        }
-
-        context.sendBroadcast(Intent("com.yhlhenry.smsforwarder.LOG_UPDATED"))
-    }
-
     private fun isoTimestamp() = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
         .apply { timeZone = TimeZone.getTimeZone("UTC") }
-        .format(Date())
-
-    private fun localTimestamp() = SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault())
         .format(Date())
 }

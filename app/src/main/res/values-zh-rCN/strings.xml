@@ -19,8 +19,15 @@
     <string name="step2_desc">选择「从 Webhook 开始」作为触发方式，Slack 将自动生成一个专属 Webhook URL。</string>
     <string name="step3_title">添加变量</string>
     <string name="step3_desc">添加 5 个「文本」类型的变量，名称必须完全一致：sender、message、receiver、device、timestamp。</string>
-    <string name="step4_title">添加步骤 — 发送消息</string>
-    <string name="step4_desc">点击「添加步骤」→「发送消息」，选择频道并用变量编写内容，例如：「📱 来自 {{sender}} 的短信：{{message}}」。</string>
+    <string name="step4_title">⚠️ 添加动作：发送消息</string>
+    <string name="step4_desc">此步骤必须完成 — 否则 Webhook 虽然会被触发，但 Slack 中不会显示任何内容。
+
+点击「添加步骤」→「发送消息」，选择频道（或指定用户），并用变量编写消息内容，例如：
+
+📱 来自 {{sender}} 的短信
+{{message}}
+
+接收方：{{receiver}} · {{timestamp}} · via {{device}}</string>
     <string name="step5_title">发布并复制 URL</string>
     <string name="step5_desc">点击「发布」，复制以 https://hooks.slack.com/triggers/… 开头的 Webhook URL，粘贴到 App 后保存即完成。</string>
     <string name="section_testing">测试</string>
@@ -48,4 +55,5 @@
     <string name="btn_send">发送到 Slack</string>
     <string name="btn_cancel">取消</string>
     <string name="home_github_label">GitHub — 问题反馈 &amp; 建议</string>
+    <string name="hint_my_number">我的号码（选填 — 自动检测失败时使用）</string>
 </resources>

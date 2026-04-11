@@ -19,8 +19,15 @@
     <string name="step2_desc">트리거로 「웹훅에서 시작」을 선택하세요. Slack이 전용 Webhook URL을 생성합니다.</string>
     <string name="step3_title">변수 추가</string>
     <string name="step3_desc">「텍스트」유형의 변수 5개를 추가하세요. 이름은 정확히: sender, message, receiver, device, timestamp.</string>
-    <string name="step4_title">단계 추가 — 메시지 보내기</string>
-    <string name="step4_desc">「단계 추가」→「메시지 보내기」. 채널을 선택하고 변수로 메시지를 작성하세요. 예: 「📱 {{sender}}의 SMS: {{message}}」</string>
+    <string name="step4_title">⚠️ 액션 추가: 메시지 보내기</string>
+    <string name="step4_desc">이 단계는 필수입니다 — 설정하지 않으면 Webhook은 실행되지만 Slack에 아무것도 표시되지 않습니다.
+
+「단계 추가」→「메시지 보내기」클릭. 채널(또는 특정 사용자)을 선택하고 변수로 메시지를 작성하세요. 예:
+
+📱 {{sender}}의 SMS
+{{message}}
+
+수신: {{receiver}} · {{timestamp}} · via {{device}}</string>
     <string name="step5_title">게시 후 URL 복사</string>
     <string name="step5_desc">「게시」를 클릭하세요. https://hooks.slack.com/triggers/… 로 시작하는 Webhook URL을 복사하여 앱에 붙여넣고 저장하면 완료입니다.</string>
     <string name="section_testing">테스트</string>
@@ -48,4 +55,5 @@
     <string name="btn_send">Slack으로 전송</string>
     <string name="btn_cancel">취소</string>
     <string name="home_github_label">GitHub — 문제 신고 &amp; 피드백</string>
+    <string name="hint_my_number">내 전화번호（선택 — 자동 감지 실패 시）</string>
 </resources>

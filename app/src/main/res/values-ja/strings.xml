@@ -19,8 +19,15 @@
     <string name="step2_desc">トリガーとして「Webhookから開始」を選択。Slackが専用のWebhook URLを生成します。</string>
     <string name="step3_title">変数を追加</string>
     <string name="step3_desc">「テキスト」タイプの変数を5つ追加。名前は正確に：sender、message、receiver、device、timestamp。</string>
-    <string name="step4_title">ステップを追加 — メッセージを送信</string>
-    <string name="step4_desc">「ステップを追加」→「メッセージを送信」。チャンネルを選択し変数でメッセージを作成。例：「📱 {{sender}}からのSMS：{{message}}」</string>
+    <string name="step4_title">⚠️ アクションを追加：メッセージを送信</string>
+    <string name="step4_desc">このステップは必須です — 設定しないと、WebhookはトリガーされてもSlackには何も表示されません。
+
+「ステップを追加」→「メッセージを送信」をクリック。チャンネル（または特定のユーザー）を選び、変数でメッセージを作成してください。例：
+
+📱 {{sender}}からのSMS
+{{message}}
+
+受信：{{receiver}} · {{timestamp}} · via {{device}}</string>
     <string name="step5_title">公開してURLをコピー</string>
     <string name="step5_desc">「公開」をクリック。https://hooks.slack.com/triggers/… で始まるWebhook URLをコピーし、アプリに貼り付けて保存すれば完了です。</string>
     <string name="section_testing">テスト</string>
@@ -48,4 +55,5 @@
     <string name="btn_send">Slackに送信</string>
     <string name="btn_cancel">キャンセル</string>
     <string name="home_github_label">GitHub — 不具合報告 &amp; フィードバック</string>
+    <string name="hint_my_number">自分の電話番号（任意 — 自動検出に失敗した場合）</string>
 </resources>

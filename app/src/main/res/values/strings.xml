@@ -24,8 +24,8 @@
     <string name="step2_desc">Select "Starts from a webhook" as the trigger. Slack will generate a unique webhook URL.</string>
     <string name="step3_title">Add variables</string>
     <string name="step3_desc">Add 5 Text variables named exactly: sender, message, receiver, device, timestamp.</string>
-    <string name="step4_title">Add a step — Send a message</string>
-    <string name="step4_desc">Click "Add Step" → "Send a message". Choose a channel and compose your message using the variables, e.g. "📱 SMS from {{sender}}: {{message}}".</string>
+    <string name="step4_title">⚠️ Add action: Send a message</string>
+    <string name="step4_desc">This step is required — without it, the webhook fires but nothing appears in Slack.\n\nClick "Add Step" → "Send a message". Choose a channel (or a person) and write your message using the variables, e.g:\n\n📱 SMS from {{sender}}\n{{message}}\n\nReceived by {{receiver}} · {{timestamp}} · via {{device}}</string>
     <string name="step5_title">Publish and copy the URL</string>
     <string name="step5_desc">Click "Publish". Copy the webhook URL (starts with https://hooks.slack.com/triggers/…) and paste it into this app.</string>
     <string name="section_testing">TESTING</string>
@@ -39,6 +39,7 @@
     <string name="section_endpoint">SLACK WEBHOOK URL</string>
     <string name="hint_url" translatable="false">https://hooks.slack.com/triggers/…</string>
     <string name="hint_device_name">Device name (shown in Slack message)</string>
+    <string name="hint_my_number">My phone number (optional — if auto-detect fails)</string>
     <string name="btn_save_settings">Save Settings</string>
     <string name="btn_send_test">Send Test</string>
     <string name="btn_test_from_inbox">Test from Inbox</string>

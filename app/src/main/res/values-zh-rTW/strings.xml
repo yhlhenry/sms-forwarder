@@ -19,8 +19,15 @@
     <string name="step2_desc">選擇「從 Webhook 開始」作為觸發方式，Slack 將自動產生一個專屬 Webhook URL。</string>
     <string name="step3_title">新增變數</string>
     <string name="step3_desc">新增 5 個「文字」類型的變數，名稱必須完全一致：sender、message、receiver、device、timestamp。</string>
-    <string name="step4_title">新增步驟 — 傳送訊息</string>
-    <string name="step4_desc">點選「新增步驟」→「傳送訊息」，選擇頻道並用變數編寫內容，例如：「📱 來自 {{sender}} 的簡訊：{{message}}」。</string>
+    <string name="step4_title">⚠️ 新增動作：傳送訊息</string>
+    <string name="step4_desc">這個步驟不可跳過 — 沒有設定的話，Webhook 雖然會被觸發，但 Slack 什麼都不會顯示。
+
+點選「新增步驟」→「傳送訊息」，選擇頻道（或指定使用者），並用變數編寫訊息內容，例如：
+
+📱 來自 {{sender}} 的簡訊
+{{message}}
+
+接收方：{{receiver}} · {{timestamp}} · via {{device}}</string>
     <string name="step5_title">發布並複製 URL</string>
     <string name="step5_desc">點選「發布」，複製以 https://hooks.slack.com/triggers/… 開頭的 Webhook URL，貼入 App 後儲存即完成。</string>
     <string name="section_testing">測試</string>
@@ -48,4 +55,5 @@
     <string name="btn_send">發送到 Slack</string>
     <string name="btn_cancel">取消</string>
     <string name="home_github_label">GitHub — 問題回報 &amp; 意見反映</string>
+    <string name="hint_my_number">我的號碼（選填 — 自動偵測失敗時使用）</string>
 </resources>

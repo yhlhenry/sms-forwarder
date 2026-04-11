@@ -19,8 +19,15 @@
     <string name="step2_desc">Sélectionnez « Depuis un webhook » comme déclencheur. Slack générera une URL unique.</string>
     <string name="step3_title">Ajouter des variables</string>
     <string name="step3_desc">Ajoutez 5 variables de type Texte avec ces noms exacts : sender, message, receiver, device, timestamp.</string>
-    <string name="step4_title">Ajouter une étape — Envoyer un message</string>
-    <string name="step4_desc">Cliquez sur « Ajouter une étape » → « Envoyer un message ». Choisissez un canal et rédigez avec les variables. Ex : « 📱 SMS de {{sender}} : {{message}} »</string>
+    <string name="step4_title">⚠️ Ajouter une action : Envoyer un message</string>
+    <string name="step4_desc">Cette étape est obligatoire — sans elle, le webhook se déclenche mais rien n'apparaît dans Slack.
+
+Cliquez sur «Ajouter une étape» → «Envoyer un message». Choisissez un canal (ou une personne) et rédigez votre message avec les variables. Ex :
+
+📱 SMS de {{sender}}
+{{message}}
+
+Reçu par {{receiver}} · {{timestamp}} · via {{device}}</string>
     <string name="step5_title">Publier et copier l\'URL</string>
     <string name="step5_desc">Cliquez sur « Publier ». Copiez l\'URL (commence par https://hooks.slack.com/triggers/…) et collez-la dans l\'app.</string>
     <string name="section_testing">TESTS</string>
@@ -48,4 +55,5 @@
     <string name="btn_send">Envoyer sur Slack</string>
     <string name="btn_cancel">Annuler</string>
     <string name="home_github_label">GitHub — Problèmes &amp; Feedback</string>
+    <string name="hint_my_number">Mon numéro（optionnel — si la détection échoue）</string>
 </resources>
