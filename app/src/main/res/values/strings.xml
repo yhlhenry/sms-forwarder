@@ -58,5 +58,5 @@
     <string name="btn_send">Send to Slack</string>
     <string name="btn_cancel">Cancel</string>
     <string name="home_github_label">GitHub — Issues &amp; Feedback</string>
-    <string name="home_github_url" translatable="false">https://github.com/yhlhenry/sms-forwarder</string>
+    <string name="home_github_url" translatable="false">https://github.com/yhlhenry/sms-to-slack</string>
 </resources>
