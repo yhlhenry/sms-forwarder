@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
         val receiver    = SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" }
         val testSender  = "+886912345678"
         val testMessage = "Test SMS from SMS to Slack"
-        val payload = SmsReceiver.buildSlackPayload(testSender, testMessage, receiver, deviceName, timestamp)
+        val payload = SmsReceiver.buildPayload(testSender, testMessage, receiver, deviceName, timestamp)
         executeRequest(url, payload, binding.btnTest)
     }
 
@@ -208,13 +208,15 @@ class MainActivity : AppCompatActivity() {
         val deviceName = binding.etDeviceName.text.toString().trim().ifBlank { Build.MODEL }
         val timestamp  = isoTimestamp()
         val receiver   = SmsReceiver.getOwnPhoneNumber(this).ifBlank { "(unknown)" }
-        val payload    = SmsReceiver.buildSlackPayload(sms.address, sms.body, receiver, deviceName, timestamp)
+        val payload    = SmsReceiver.buildPayload(sms.address, sms.body, receiver, deviceName, timestamp)
 
         val preview = buildString {
-            append("📱 New SMS from ${sms.address}")
-            if (sms.displayName != sms.address) append("\n   (${sms.displayName})")
-            append("\n\n${sms.body.take(200)}${if (sms.body.length > 200) "…" else ""}")
-            append("\n\nTo: $receiver · $timestamp\nvia $deviceName")
+            append("sender     ${sms.address}")
+            if (sms.displayName != sms.address) append(" (${sms.displayName})")
+            append("\nmessage    ${sms.body.take(120)}${if (sms.body.length > 120) "…" else ""}")
+            append("\nreceiver   $receiver")
+            append("\ndevice     $deviceName")
+            append("\ntimestamp  $timestamp")
         }
 
         AlertDialog.Builder(this)

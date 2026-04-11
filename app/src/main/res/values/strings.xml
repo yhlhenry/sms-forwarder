@@ -14,20 +14,20 @@
     <string name="tutorial_heading">Setup Guide</string>
     <string name="tutorial_subheading">Connect SMS to your Slack channel</string>
     <string name="section_about">HOW IT WORKS</string>
-    <string name="tutorial_about_body">This app listens for incoming SMS messages and automatically posts them to your Slack channel via an Incoming Webhook.\n\nNo server required. No account needed. Just paste a Slack webhook URL and you\'re done.</string>
-    <string name="section_message_format">SLACK MESSAGE FORMAT</string>
-    <string name="tutorial_message_format_body">📱 New SMS from +886912345678\n\nYour verification code is 1234.\n\nTo: +886987654321 · 2026-04-11T08:30:00Z · via Pixel 7</string>
+    <string name="tutorial_about_body">This app listens for incoming SMS messages and triggers a Slack Workflow via webhook — automatically sending the message data to your Slack channel.\n\nNo server required. Set up a Workflow in Slack, paste the webhook URL here, and you\'re done.</string>
+    <string name="section_message_format">DATA SENT TO SLACK</string>
+    <string name="tutorial_message_format_body">sender     +886912345678\nmessage    Your verification code is 1234.\nreceiver   +886987654321\ndevice     Pixel 7\ntimestamp  2026-04-11T08:30:00Z</string>
     <string name="section_steps">SETUP STEPS</string>
-    <string name="step1_title">Go to api.slack.com/apps</string>
-    <string name="step1_desc">Open the Slack API site and sign in. Click "Create New App" → "From scratch".</string>
-    <string name="step2_title">Name your app</string>
-    <string name="step2_desc">Give it any name (e.g. "SMS Forwarder") and select your workspace. Click "Create App".</string>
-    <string name="step3_title">Enable Incoming Webhooks</string>
-    <string name="step3_desc">In the left sidebar click "Incoming Webhooks". Toggle the switch to ON.</string>
-    <string name="step4_title">Add webhook to a channel</string>
-    <string name="step4_desc">Scroll down and click "Add New Webhook to Workspace". Pick the channel where SMS should appear, then click "Allow".</string>
-    <string name="step5_title">Copy the URL and paste it here</string>
-    <string name="step5_desc">Copy the webhook URL (starts with https://hooks.slack.com/services/…) and paste it into the app. Save and you\'re done.</string>
+    <string name="step1_title">Open Workflow Builder</string>
+    <string name="step1_desc">In Slack, click your workspace name → Tools → Workflow Builder. Click "New Workflow".</string>
+    <string name="step2_title">Choose "From a webhook"</string>
+    <string name="step2_desc">Select "Starts from a webhook" as the trigger. Slack will generate a unique webhook URL.</string>
+    <string name="step3_title">Add variables</string>
+    <string name="step3_desc">Add 5 Text variables named exactly: sender, message, receiver, device, timestamp.</string>
+    <string name="step4_title">Add a step — Send a message</string>
+    <string name="step4_desc">Click "Add Step" → "Send a message". Choose a channel and compose your message using the variables, e.g. "📱 SMS from {{sender}}: {{message}}".</string>
+    <string name="step5_title">Publish and copy the URL</string>
+    <string name="step5_desc">Click "Publish". Copy the webhook URL (starts with https://hooks.slack.com/triggers/…) and paste it into this app.</string>
     <string name="section_testing">TESTING</string>
     <string name="test_send_title">Send Test</string>
     <string name="test_send_desc">Sends a sample SMS to Slack to verify your webhook is working.</string>
@@ -37,7 +37,7 @@
 
     <!-- Main activity -->
     <string name="section_endpoint">SLACK WEBHOOK URL</string>
-    <string name="hint_url" translatable="false">https://hooks.slack.com/services/…</string>
+    <string name="hint_url" translatable="false">https://hooks.slack.com/triggers/…</string>
     <string name="hint_device_name">Device name (shown in Slack message)</string>
     <string name="btn_save_settings">Save Settings</string>
     <string name="btn_send_test">Send Test</string>

@@ -15,7 +15,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -30,33 +29,19 @@ class SmsReceiver : BroadcastReceiver() {
 
         fun logFile(context: Context) = java.io.File(context.getExternalFilesDir(null), "sms_log.txt")
 
-        /** Builds the Slack Incoming Webhook JSON payload. */
-        fun buildSlackPayload(
+        /** Builds the Slack Workflow webhook JSON payload. */
+        fun buildPayload(
             sender: String,
             message: String,
             receiver: String,
             deviceName: String,
             timestamp: String
         ): String = JSONObject().apply {
-            put("text", "New SMS from $sender: $message")
-            put("blocks", JSONArray().apply {
-                put(JSONObject().apply {
-                    put("type", "section")
-                    put("text", JSONObject().apply {
-                        put("type", "mrkdwn")
-                        put("text", "📱 *New SMS from $sender*\n\n$message")
-                    })
-                })
-                put(JSONObject().apply {
-                    put("type", "context")
-                    put("elements", JSONArray().apply {
-                        put(JSONObject().apply {
-                            put("type", "mrkdwn")
-                            put("text", "To: $receiver · $timestamp · via $deviceName")
-                        })
-                    })
-                })
-            })
+            put("sender",    sender)
+            put("message",   message)
+            put("receiver",  receiver)
+            put("device",    deviceName)
+            put("timestamp", timestamp)
         }.toString()
 
         /** Returns this device's own phone number, or empty string if unavailable. */
@@ -127,7 +112,7 @@ class SmsReceiver : BroadcastReceiver() {
         deviceName: String,
         timestamp: String
     ) {
-        val payload = buildSlackPayload(sender, message, receiver, deviceName, timestamp)
+        val payload = buildPayload(sender, message, receiver, deviceName, timestamp)
         val status = try {
             val client = OkHttpClient()
             val request = Request.Builder()
